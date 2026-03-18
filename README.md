@@ -512,6 +512,7 @@ Copy `.env.example` to `.env` and set:
 ```bash
 # ─── Required ──────────────────────────────────────
 DO_GRADIENT_MODEL_KEY=sk-do-...      # DigitalOcean Gradient API key
+DIGITALOCEAN_API_TOKEN=      # Personal Access Token (genai CRUD + project read)
 
 # ─── ADK Agent (optional — enables agentic chat) ───
 ADK_AGENT_URL=https://agents.do-ai.run/v1/<agent-id>/production/run
