@@ -102,12 +102,26 @@ docker compose logs -f argus   # View Argus logs
 
 ### Local Development
 
+Pre-Requisites
+
 ```bash
 cd argus
 npm install
 cp .env.example .env           # Fill in DO_GRADIENT_MODEL_KEY + Evolution API credentials
-npm run dev                    # Hot-reload dev server on :3000
 ```
+Start the evolution api first, and then creeat an instance at http://localhost:8080/manager
+
+```bash
+cd evolution-api
+npm run dev:server
+```
+Once evolution api starts up, start argus
+
+```bash
+cd argus
+npm run dev
+```
+Open chrome extensions manager and load unpacked the extension folder at argus/extension
 
 ## Docker Architecture
 
