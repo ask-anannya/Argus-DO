@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Database
+data/db/*.db
+data/db/*.db-shm
+data/db/*.db-wal
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Temp files
+tmp/
+temp/
+*.tmp
+
+# Evolution API (keep source, exclude heavy stuff)
+evolution-api/node_modules/
+evolution-api/dist/
+evolution-api/.env
+evolution-api/instances/
+evolution-api/store/
+evolution-api/.DS_Store

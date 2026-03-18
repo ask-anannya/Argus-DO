@@ -1,0 +1,201 @@
+flowchart TB
+    %% ============ EXTERNAL SOURCES ============
+    WA["📱 WhatsApp Messages"]
+    CHROME["🌐 Chrome Browser"]
+
+    %% ============ EVOLUTION API ============
+    subgraph EVOL ["⚡ Evolution API :8080"]
+        direction LR
+        EVOL_SVC["Evolution API"]
+        PG[("PostgreSQL")]
+        EVOL_SVC <--> PG
+    end
+
+    %% ============ ARGUS SERVER ============
+    subgraph ARGUS ["🧠 Argus Server :3000"]
+        direction TB
+
+        %% --- Ingestion Pipeline ---
+        subgraph INGEST ["📥 Ingestion Pipeline"]
+            direction TB
+            WH["Webhook Receiver\n/api/webhook/whatsapp"]
+            PREFILTER["shouldSkipMessage()\nTrivial Pre-filter\nempty · emoji · 'ok' · 'lol'"]
+            DETECT["detectAction()\nCancel / Done / Snooze / Ignore"]
+            ANALYZE["analyzeMessage()\nSingle Llama Call\nClassify + Extract Unified"]
+            REPAIR["repairJSON(preferredKey)\nProse+Markdown → JSON\nscans all blocks, prefers by key"]
+            DEDUP["findDuplicateEvent()\n48h Title Similarity Check"]
+            CONF_GATE["Confidence Gate\nthreshold ≥ 0.65"]
+            CONFLICT["checkEventConflicts()\n60min Window"]
+            SAVE["insertEvent() + insertTrigger()"]
+        end
+
+        %% --- AI Engine ---
+        subgraph AI ["🤖 LLM Engine · Gradient"]
+            direction TB
+            LLAMA["Llama 3.3 70B\nDigitalOcean Gradient\n(OpenAI-compat endpoint)"]
+            GEN_POPUP["generatePopupBlueprint()\nFull Popup Spec via AI\nicon · title · buttons · styles\n[sender] mentioned: body format"]
+            VALIDATE["validateRelevance()\nURL ↔ Event Matching"]
+            AI_CHAT["chatWithContext()\nNatural Language Q&A"]
+        end
+
+        %% --- Scheduler ---
+        subgraph SCHED ["⏰ Scheduler"]
+            direction TB
+            TIME_CHK["checkTimeTriggers()\n24h · 1h · 15m intervals"]
+            REM_CHK["checkDueReminders()\n30s poll"]
+            SNOOZE_CHK["checkSnoozedEvents()\n30s poll"]
+        end
+
+        %% --- Data Layer ---
+        subgraph DATA ["💾 Data Layer"]
+            direction LR
+            SQLITE[("SQLite + FTS5")]
+            DB_OPS["db.ts CRUD"]
+            FTS5_IDX["events_fts\nFTS5 BM25 Search"]
+            DB_OPS <--> SQLITE
+            FTS5_IDX <--> SQLITE
+        end
+
+        %% --- REST API ---
+        subgraph API ["🔌 REST API"]
+            direction TB
+            EP_EVENTS["/api/events\n/api/events/:id"]
+            EP_STATS["/api/stats\n/api/health"]
+            EP_ACTIONS["/api/events/:id/action\ncomplete · snooze · ignore · dismiss"]
+            EP_CHAT["/api/chat"]
+            EP_CTX["/api/context-check"]
+            EP_DAY["/api/events/day/:timestamp"]
+            EP_INT["/api/internal/*\n🔐 x-internal-secret"]
+        end
+
+        WS["🔗 WebSocket /ws"]
+    end
+
+    %% ============ ADK AGENT ============
+    subgraph ADK ["🐍 DO Gradient ADK Agent"]
+        direction TB
+        ADK_SVC["Python / LangGraph\nagent deployed on Gradient"]
+        ADK_SEARCH["search_events(query)\ntool → /api/internal/search"]
+        ADK_GET["get_event(id)\ntool → /api/internal/events/:id"]
+        ADK_SVC --> ADK_SEARCH
+        ADK_SVC --> ADK_GET
+    end
+
+    %% ============ CHROME EXTENSION ============
+    subgraph EXT ["🧩 Chrome Extension · Manifest V3"]
+        direction TB
+
+        subgraph BG ["Service Worker"]
+            direction LR
+            BG_JS["background.js"]
+            WS_CLI["WebSocket Client"]
+            BG_JS <--> WS_CLI
+        end
+
+        subgraph CS ["Content Script — Pure Renderer"]
+            direction TB
+            CS_JS["content.js"]
+            POPUP["API-Driven Popup\nRenders blueprint from server\nNo hardcoded templates"]
+            TOAST["Toast Notifications"]
+            DAY_VIEW["View My Day\nColor-coded Timeline"]
+        end
+
+        subgraph SIDE ["AI Chat Sidebar"]
+            direction LR
+            SP_HTML["sidepanel.html"]
+            SP_JS["sidepanel.js"]
+        end
+
+        subgraph EXT_POP ["Extension Popup"]
+            direction LR
+            POP_HTML["popup.html"]
+            POP_JS["popup.js"]
+        end
+    end
+
+    %% ============ 3 CORE SCENARIOS ============
+    subgraph SCENARIOS ["🎯 3 Core Scenarios"]
+        direction LR
+        S1["🥜 Goa Cashew\nRecommendation → URL trigger\non travel/goa sites"]
+        S4["📺 Netflix Cancel\nSubscription → URL trigger\non netflix.com"]
+        S5["📅 Calendar Conflict\nInformal dinner commitment →\nConflict when new meeting overlaps"]
+    end
+
+    %% ============ INGESTION FLOW ============
+    WA -->|"messages"| EVOL_SVC
+    EVOL_SVC -->|"webhook POST"| WH
+    WH --> PREFILTER
+    PREFILTER -->|"❌ trivial message"| SKIP_MSG["⏭️ Skip"]
+    PREFILTER -->|"✅ non-trivial"| DETECT
+    DETECT -->|"action found"| ACTION_EXEC["Execute on DB\ndelete · complete · snooze"]
+    DETECT -->|"no action"| ANALYZE
+    ANALYZE -->|"AI call"| LLAMA
+    LLAMA -->|"prose/JSON"| REPAIR
+    ANALYZE --> CONF_GATE
+    CONF_GATE -->|"< 0.65 → reject"| SKIP_LOW["⏭️ Low Confidence"]
+    CONF_GATE -->|"≥ 0.65 → check dedup"| DEDUP
+    DEDUP -->|"duplicate found → skip"| SKIP_DUP["⏭️ Duplicate"]
+    DEDUP -->|"unique → save"| SAVE
+    SAVE --> CONFLICT
+    CONFLICT -->|"overlap detected"| GEN_POPUP
+    SAVE --> DB_OPS
+    SAVE -->|"new event"| GEN_POPUP
+
+    %% ============ POPUP BLUEPRINT FLOW ============
+    GEN_POPUP -->|"AI call"| LLAMA
+    GEN_POPUP -->|"popup blueprint\nicon · title · [sender] mentioned: body"| WS
+
+    %% ============ AI ENGINE CONNECTIONS ============
+    DETECT -->|"AI call"| LLAMA
+    AI_CHAT -->|"AI call"| LLAMA
+    VALIDATE -->|"AI call"| LLAMA
+    VALIDATE --> DB_OPS
+
+    %% ============ SCHEDULER → DATA → WS ============
+    TIME_CHK --> DB_OPS
+    REM_CHK --> DB_OPS
+    SNOOZE_CHK --> DB_OPS
+    SCHED -->|"event due"| GEN_POPUP
+
+    %% ============ WS ↔ EXTENSION ============
+    WS_CLI <-->|"WebSocket :3000/ws"| WS
+    WS_CLI -->|"popup blueprint"| CS_JS
+    WS_CLI -->|"notifications"| BG_JS
+
+    %% ============ EXTENSION → API ============
+    CS_JS --> POPUP
+    CS_JS --> TOAST
+    CS_JS --> DAY_VIEW
+    SP_JS -->|"POST /api/chat"| EP_CHAT
+    POP_JS -->|"GET /api/events"| EP_EVENTS
+    POP_JS -->|"GET /api/stats"| EP_STATS
+    CS_JS -->|"POST /api/events/:id/action"| EP_ACTIONS
+
+    %% ============ CHAT → ADK → INTERNAL ============
+    EP_CHAT -->|"try ADK first"| ADK_SVC
+    ADK_SEARCH -->|"x-internal-secret"| EP_INT
+    ADK_GET -->|"x-internal-secret"| EP_INT
+    EP_INT --> FTS5_IDX
+    EP_INT --> DB_OPS
+    EP_CHAT -->|"fallback / direct"| AI_CHAT
+
+    %% ============ CONTEXT TRIGGER FLOW ============
+    CHROME -->|"URL changes"| BG_JS
+    BG_JS -->|"POST /api/context-check"| EP_CTX
+    EP_CTX -->|"validate"| VALIDATE
+    EP_CTX -->|"FTS5 search"| FTS5_IDX
+    EP_CTX -->|"matching events"| GEN_POPUP
+    BG_JS -->|"context popup"| CS_JS
+
+    %% ============ API → DATA ============
+    EP_CHAT --> AI_CHAT
+    EP_ACTIONS --> DB_OPS
+    EP_EVENTS --> DB_OPS
+    EP_STATS --> DB_OPS
+    EP_DAY --> DB_OPS
+    ACTION_EXEC --> DB_OPS
+
+    %% ============ SCENARIO TRIGGERS ============
+    S1 -.->|"travel site URL match"| EP_CTX
+    S4 -.->|"netflix.com URL match"| EP_CTX
+    S5 -.->|"time overlap check"| CONFLICT

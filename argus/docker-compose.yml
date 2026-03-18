@@ -1,0 +1,180 @@
+# ============================================================
+# Argus — Full Stack Docker Compose
+# 4 containers: argus, evolution-api, postgres, redis
+# Works on Linux, macOS, and Windows (Docker Desktop)
+# ============================================================
+# Usage:
+#   cp .env.example .env        # Fill in DO_GRADIENT_MODEL_KEY
+#   docker compose up -d        # Start everything
+#   docker compose logs -f      # View logs
+#   docker compose down         # Stop
+#   docker compose down -v      # Stop + delete volumes
+# ============================================================
+
+services:
+
+  # ─── 1. PostgreSQL (Evolution API database) ───────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: argus-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: evolution
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ─── 2. Redis (Evolution API cache) ──────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: argus-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── 3. Evolution API (WhatsApp bridge) ──────────────────
+  evolution-api:
+    build:
+      context: ../evolution-api
+      dockerfile: Dockerfile
+    container_name: argus-evolution
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "${EVOLUTION_PORT:-8080}:8080"
+    environment:
+      # Server
+      - SERVER_NAME=evolution
+      - SERVER_TYPE=http
+      - SERVER_PORT=8080
+      - SERVER_URL=http://evolution-api:8080
+      - DOCKER_ENV=true
+      # Database
+      - DATABASE_PROVIDER=postgresql
+      - DATABASE_CONNECTION_URI=postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@postgres:5432/evolution?schema=evolution_api
+      - DATABASE_CONNECTION_CLIENT_NAME=evolution_exchange
+      - DATABASE_SAVE_DATA_INSTANCE=true
+      - DATABASE_SAVE_DATA_NEW_MESSAGE=true
+      - DATABASE_SAVE_MESSAGE_UPDATE=true
+      - DATABASE_SAVE_DATA_CONTACTS=true
+      - DATABASE_SAVE_DATA_CHATS=true
+      - DATABASE_SAVE_DATA_LABELS=true
+      - DATABASE_SAVE_DATA_HISTORIC=true
+      - DATABASE_SAVE_IS_ON_WHATSAPP=true
+      - DATABASE_SAVE_IS_ON_WHATSAPP_DAYS=7
+      - DATABASE_DELETE_MESSAGE=true
+      # Redis
+      - CACHE_REDIS_ENABLED=true
+      - CACHE_REDIS_URI=redis://redis:6379/6
+      - CACHE_REDIS_TTL=604800
+      - CACHE_REDIS_PREFIX_KEY=evolution
+      - CACHE_REDIS_SAVE_INSTANCES=false
+      # Auth
+      - AUTHENTICATION_API_KEY=${EVOLUTION_API_KEY:-rmd_evolution_api_key_12345}
+      - AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES=true
+      # Logging
+      - LOG_LEVEL=ERROR,WARN,DEBUG,INFO,LOG,VERBOSE,DARK,WEBHOOKS,WEBSOCKET
+      # Global webhook → pushes ALL messages to Argus
+      - WEBHOOK_GLOBAL_ENABLED=true
+      - WEBHOOK_GLOBAL_URL=http://argus:3000/api/webhook/whatsapp
+      - WEBHOOK_GLOBAL_WEBHOOK_BY_EVENTS=false
+      # Disable unused integrations
+      - RABBITMQ_ENABLED=false
+      - SQS_ENABLED=false
+      - WEBSOCKET_ENABLED=false
+    volumes:
+      - evolution_instances:/evolution/instances
+      - evolution_store:/evolution/store
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # ─── 4. Argus (Proactive Memory Assistant) ──────────────
+  argus:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: argus-server
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      evolution-api:
+        condition: service_healthy
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      # App
+      - NODE_ENV=production
+      - PORT=3000
+      - TIMEZONE=${TIMEZONE:-Asia/Kolkata}
+      # SQLite (persistent volume)
+      - SQLITE_PATH=/app/data/argus.db
+      # DigitalOcean Gradient (REQUIRED — set in .env)
+      - DO_GRADIENT_MODEL_KEY=${DO_GRADIENT_MODEL_KEY:?Set DO_GRADIENT_MODEL_KEY in .env}
+      - DIGITALOCEAN_API_TOKEN=${DIGITALOCEAN_API_TOKEN}
+      - ADK_AGENT_URL=${ADK_AGENT_URL}
+      # Internal API security
+      - INTERNAL_API_SECRET=${INTERNAL_API_SECRET}
+      # Evolution API (internal Docker network)
+      - EVOLUTION_API_URL=http://evolution-api:8080
+      - EVOLUTION_API_KEY=${EVOLUTION_API_KEY:-rmd_evolution_api_key_12345}
+      - EVOLUTION_INSTANCE_NAME=${EVOLUTION_INSTANCE_NAME:-argus}
+      # Evolution PostgreSQL (direct read for message history)
+      - EVOLUTION_PG_HOST=postgres
+      - EVOLUTION_PG_PORT=5432
+      - EVOLUTION_PG_DATABASE=evolution
+      - EVOLUTION_PG_USER=postgres
+      - EVOLUTION_PG_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      # Processing
+      - HOT_WINDOW_DAYS=${HOT_WINDOW_DAYS:-90}
+      - PROCESS_OWN_MESSAGES=${PROCESS_OWN_MESSAGES:-true}
+      - SKIP_GROUP_MESSAGES=${SKIP_GROUP_MESSAGES:-false}
+      # Backup
+      - BACKUP_RETENTION_DAYS=${BACKUP_RETENTION_DAYS:-7}
+    volumes:
+      - argus_data:/app/data
+      - argus_logs:/app/logs
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  evolution_instances:
+    driver: local
+  evolution_store:
+    driver: local
+  argus_data:
+    driver: local
+  argus_logs:
+    driver: local

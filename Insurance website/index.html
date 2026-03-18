@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACKO - Car Insurance, Renewed in 2 Minutes</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="#" class="logo">ACKO</a>
+            <ul class="nav-links">
+                <li><a href="#">Car Insurance</a></li>
+                <li><a href="#">Bike Insurance</a></li>
+                <li><a href="#">Health Insurance</a></li>
+                <li><a href="#">Claims</a></li>
+                <li><a href="#">Support</a></li>
+            </ul>
+            <button class="mobile-menu-btn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-headline">Car insurance, renewed in <span class="highlight">2 minutes.</span></h1>
+                <p class="hero-subheadline">Starting at just &#8377;2,094/year* <span class="gst-note">*incl. GST</span></p>
+
+                <form class="quote-form" action="#" method="post">
+                    <div class="form-group">
+                        <input
+                            type="text"
+                            class="form-input"
+                            placeholder="Enter your car model (e.g. Maruti Swift)"
+                            aria-label="Enter your car model"
+                            required
+                        >
+                        <button type="submit" class="btn-quote">Get Quote</button>
+                    </div>
+                </form>
+
+                <!-- Trust Badges -->
+                <div class="trust-badges">
+                    <div class="badge">
+                        <div class="badge-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                            </svg>
+                        </div>
+                        <div class="badge-text">
+                            <strong>4.6 &#9733;</strong>
+                            <span>Google Rating</span>
+                        </div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                        </div>
+                        <div class="badge-text">
+                            <strong>IRDAI Licensed</strong>
+                            <span>Government Approved</span>
+                        </div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                        </div>
+                        <div class="badge-text">
+                            <strong>98% Claims</strong>
+                            <span>Settled Successfully</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-image">
+                <div class="image-placeholder">
+                    <svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Car body -->
+                        <ellipse cx="200" cy="240" rx="160" ry="15" fill="rgba(255,255,255,0.05)"/>
+                        <path d="M80 200 L100 150 L160 120 L260 120 L310 150 L340 200 Z" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+                        <rect x="70" y="195" width="280" height="40" rx="10" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                        <!-- Windows -->
+                        <path d="M110 155 L155 125 L210 125 L210 155 Z" fill="rgba(100,180,255,0.2)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+                        <path d="M215 125 L260 125 L300 155 L215 155 Z" fill="rgba(100,180,255,0.2)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+                        <!-- Wheels -->
+                        <circle cx="135" cy="235" r="25" fill="rgba(50,50,50,0.8)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+                        <circle cx="135" cy="235" r="12" fill="rgba(100,100,100,0.5)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+                        <circle cx="285" cy="235" r="25" fill="rgba(50,50,50,0.8)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+                        <circle cx="285" cy="235" r="12" fill="rgba(100,100,100,0.5)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+                        <!-- Headlights -->
+                        <ellipse cx="340" cy="210" rx="8" ry="6" fill="rgba(255,220,100,0.6)"/>
+                        <ellipse cx="78" cy="210" rx="8" ry="6" fill="rgba(255,100,100,0.4)"/>
+                        <!-- Text overlay -->
+                        <text x="200" y="80" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="16" font-family="Inter, sans-serif">Your car, protected.</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="features-container">
+            <h2 class="features-title">Why Choose Us?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <h3>Quick Renewal</h3>
+                    <p>Renew your car insurance in just 2 minutes. No paperwork, no hassle.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                            <line x1="1" y1="10" x2="23" y2="10"/>
+                        </svg>
+                    </div>
+                    <h3>Best Prices</h3>
+                    <p>Save up to 70% on your premium with zero commission pricing.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </div>
+                    <h3>Instant Claims</h3>
+                    <p>File claims directly from the app. Get approved within hours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="#" class="footer-logo">ACKO</a>
+                <p class="footer-tagline">Insurance made simple, fast, and affordable.</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>Products</h4>
+                    <ul>
+                        <li><a href="#">Car Insurance</a></li>
+                        <li><a href="#">Bike Insurance</a></li>
+                        <li><a href="#">Health Insurance</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Use</a></li>
+                        <li><a href="#">IRDAI</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 ACKO Insurance. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const menuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            menuBtn.classList.toggle('active');
+        });
+    </script>
+
+</body>
+</html>

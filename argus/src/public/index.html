@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Argus - Proactive Memory Assistant</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg-primary: #0d1117;
+      --bg-secondary: #161b22;
+      --bg-tertiary: #21262d;
+      --border: #30363d;
+      --text-primary: #e6edf3;
+      --text-secondary: #8b949e;
+      --accent: #58a6ff;
+      --success: #3fb950;
+      --warning: #d29922;
+      --danger: #f85149;
+      --purple: #a371f7;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+    .app { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 240px;
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border);
+      padding: 20px 0;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .main { margin-left: 240px; flex: 1; padding: 20px; }
+    .logo { padding: 0 20px 20px; font-size: 1.5rem; font-weight: bold; color: var(--accent); border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+    .logo span { color: var(--danger); }
+    .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 20px; color: var(--text-secondary); cursor: pointer; transition: all 0.2s; }
+    .nav-item:hover, .nav-item.active { background: var(--bg-tertiary); color: var(--text-primary); }
+    .nav-item.active { border-left: 3px solid var(--accent); }
+    .nav-badge { margin-left: auto; background: var(--danger); color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .header h1 { font-size: 1.5rem; }
+    .status-bar { display: flex; gap: 20px; align-items: center; }
+    .status-item { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-secondary); }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+    .status-dot.offline { background: var(--danger); }
+    .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 20px; }
+    .stat-label { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 8px; }
+    .stat-value { font-size: 2rem; font-weight: bold; }
+    .stat-value.blue { color: var(--accent); }
+    .stat-value.green { color: var(--success); }
+    .stat-value.orange { color: var(--warning); }
+    .stat-value.purple { color: var(--purple); }
+    .stat-value.red { color: var(--danger); }
+    .card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 20px; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+    .card-title { font-weight: 600; }
+    .card-body { padding: 0; max-height: 500px; overflow-y: auto; }
+    .card-body.padded { padding: 20px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px 20px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { color: var(--text-secondary); font-weight: 500; font-size: 0.85rem; position: sticky; top: 0; background: var(--bg-secondary); }
+    tr:hover { background: var(--bg-tertiary); }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 500; }
+    .badge-discovered { background: rgba(210, 153, 34, 0.2); color: var(--warning); }
+    .badge-scheduled { background: rgba(88, 166, 255, 0.2); color: var(--accent); }
+    .badge-snoozed { background: rgba(163, 113, 247, 0.2); color: var(--purple); }
+    .badge-ignored { background: rgba(110, 118, 129, 0.2); color: var(--text-secondary); }
+    .badge-reminded { background: rgba(163, 113, 247, 0.2); color: var(--purple); }
+    .badge-completed { background: rgba(63, 185, 80, 0.2); color: var(--success); }
+    .badge-expired { background: rgba(248, 81, 73, 0.2); color: var(--danger); }
+    .badge-dismissed { background: rgba(139, 148, 158, 0.2); color: var(--text-secondary); }
+    .badge-pending { background: rgba(210, 153, 34, 0.2); color: var(--warning); }
+    .badge-info { background: rgba(88, 166, 255, 0.2); color: var(--accent); }
+    .badge-sent { background: rgba(163, 113, 247, 0.2); color: var(--purple); }
+    .badge-received { background: rgba(63, 185, 80, 0.2); color: var(--success); }
+    .btn { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+    .btn-sm { padding: 4px 8px; font-size: 0.75rem; }
+    .btn-success { background: var(--success); color: white; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-warning { background: var(--warning); color: black; }
+    .btn-secondary { background: var(--text-secondary); color: white; }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn:hover { opacity: 0.8; transform: translateY(-1px); }
+    .btn-group { display: flex; gap: 8px; }
+    .log-container { max-height: 400px; overflow-y: auto; font-family: 'Monaco', 'Menlo', monospace; font-size: 0.85rem; }
+    .log-entry { padding: 8px 20px; border-bottom: 1px solid var(--border); display: flex; gap: 12px; }
+    .log-time { color: var(--text-secondary); min-width: 80px; }
+    .log-type { min-width: 80px; font-weight: 500; }
+    .log-type.info { color: var(--accent); }
+    .log-type.success { color: var(--success); }
+    .log-type.warning { color: var(--warning); }
+    .log-type.error { color: var(--danger); }
+    .log-message { flex: 1; word-break: break-word; }
+    .tabs { display: flex; border-bottom: 1px solid var(--border); }
+    .tab { padding: 12px 20px; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+    .tab:hover { color: var(--text-primary); }
+    .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; margin-bottom: 8px; color: var(--text-secondary); font-size: 0.85rem; }
+    input, textarea, select { width: 100%; padding: 10px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 6px; color: var(--text-primary); font-size: 0.9rem; }
+    input:focus, textarea:focus { outline: none; border-color: var(--accent); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .empty-state { text-align: center; padding: 40px; color: var(--text-secondary); }
+    .msg-preview { max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .msg-from { font-weight: 500; }
+    .msg-phone { color: var(--text-secondary); font-size: 0.85rem; }
+    .toast-container { position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; }
+    .toast { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; min-width: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); animation: slideIn 0.3s ease; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } }
+    .toast-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .toast-title { font-weight: 600; }
+    .toast-close { cursor: pointer; color: var(--text-secondary); }
+    .toast-body { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 12px; }
+    .toast-actions { display: flex; gap: 8px; }
+    @media (max-width: 1400px) { .stats-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 1200px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; } .grid-2 { grid-template-columns: 1fr; } }
+    .section { display: none; }
+    .section.active { display: block; }
+    .filter-bar { display: flex; gap: 10px; align-items: center; margin-bottom: 16px; }
+    .filter-bar select { width: auto; min-width: 150px; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">Argus<span>.</span></div>
+      <nav>
+        <div class="nav-item active" data-section="dashboard">📊 Dashboard</div>
+        <div class="nav-item" data-section="events">📅 Events <span class="nav-badge" id="pending-badge">0</span></div>
+        <div class="nav-item" data-section="whatsapp">💬 WhatsApp</div>
+        <div class="nav-item" data-section="logs">📋 Logs</div>
+        <div class="nav-item" data-section="test">🧪 Test Tools</div>
+        <div class="nav-item" data-section="settings">⚙️ Settings</div>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <!-- Dashboard Section -->
+      <section class="section active" id="dashboard">
+        <div class="header">
+          <h1>Dashboard</h1>
+          <div class="status-bar">
+            <div class="status-item"><div class="status-dot" id="status-dot"></div><span id="status-text">Connecting...</span></div>
+            <div class="status-item">🤖 <span id="model-name">-</span></div>
+            <div class="status-item">🐘 <span id="pg-status">-</span></div>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-label">Total Events</div><div class="stat-value blue" id="stat-events">0</div></div>
+          <div class="stat-card"><div class="stat-label">Pending</div><div class="stat-value orange" id="stat-pending">0</div></div>
+          <div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value green" id="stat-completed">0</div></div>
+          <div class="stat-card"><div class="stat-label">WhatsApp Messages</div><div class="stat-value purple" id="stat-wa-messages">0</div></div>
+          <div class="stat-card"><div class="stat-label">Scheduled</div><div class="stat-value red" id="stat-scheduled">0</div></div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><span class="card-title">Recent Events</span><button class="btn btn-sm btn-primary" onclick="showSection('events')">View All</button></div>
+            <div class="card-body"><table><thead><tr><th>Event</th><th>Location</th><th>Status</th><th>Actions</th></tr></thead><tbody id="recent-events"></tbody></table></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Live Activity</span></div>
+            <div class="card-body"><div class="log-container" id="live-logs" style="max-height: 250px;"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Events Section -->
+      <section class="section" id="events">
+        <div class="header"><h1>Events & Reminders</h1><div class="btn-group"><button class="btn btn-primary" onclick="refreshEvents()">🔄 Refresh</button></div></div>
+        <div class="tabs">
+          <div class="tab active" data-filter="discovered">🆕 New</div>
+          <div class="tab" data-filter="scheduled">📅 Active</div>
+          <div class="tab" data-filter="snoozed">💤 Snoozed</div>
+          <div class="tab" data-filter="completed">✅ Done</div>
+          <div class="tab" data-filter="ignored">🚫 Ignored</div>
+          <div class="tab" data-filter="all">📋 All</div>
+        </div>
+        <div class="card" style="margin-top: 0; border-top: none; border-radius: 0 0 8px 8px;">
+          <div class="card-body"><table><thead><tr><th>Event</th><th>Location</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody id="events-table"></tbody></table></div>
+        </div>
+      </section>
+
+      <!-- WhatsApp Section -->
+      <section class="section" id="whatsapp">
+        <div class="header"><h1>WhatsApp Messages</h1><div class="btn-group"><button class="btn btn-primary" onclick="refreshWhatsApp()">🔄 Refresh</button></div></div>
+        <div class="filter-bar">
+          <select id="wa-filter-type">
+            <option value="all">All Messages</option>
+            <option value="received">Received Only</option>
+            <option value="sent">Sent Only</option>
+          </select>
+          <select id="wa-filter-chat">
+            <option value="all">All Chats</option>
+            <option value="private">Private Only</option>
+            <option value="group">Groups Only</option>
+          </select>
+          <input type="text" id="wa-search" placeholder="Search messages..." style="max-width: 300px;">
+          <button class="btn btn-primary" onclick="refreshWhatsApp()">Search</button>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <table>
+              <thead><tr><th>Time</th><th>From</th><th>Phone</th><th>Message</th><th>Type</th></tr></thead>
+              <tbody id="whatsapp-table"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Logs Section -->
+      <section class="section" id="logs">
+        <div class="header"><h1>System Logs</h1><div class="btn-group"><button class="btn btn-sm btn-danger" onclick="clearLogs()">Clear</button></div></div>
+        <div class="card"><div class="card-body"><div class="log-container" id="system-logs"></div></div></div>
+      </section>
+
+      <!-- Test Section -->
+      <section class="section" id="test">
+        <div class="header"><h1>Test Tools</h1></div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><span class="card-title">🔍 Context Match Test</span></div>
+            <div class="card-body padded">
+              <div class="form-group"><label class="form-label">URL</label><input type="text" id="test-url" placeholder="https://makemytrip.com/flights/goa"></div>
+              <div class="form-group"><label class="form-label">Page Title (optional)</label><input type="text" id="test-title" placeholder="Flights to Goa"></div>
+              <button class="btn btn-primary" onclick="testContext()">Test Match</button>
+              <pre id="context-result" style="margin-top: 16px; padding: 12px; background: var(--bg-tertiary); border-radius: 6px; overflow-x: auto; font-size: 0.85rem;"></pre>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">💬 Simulate Message</span></div>
+            <div class="card-body padded">
+              <div class="form-group"><label class="form-label">Message</label><textarea id="test-message" rows="3" placeholder="Let's plan a trip to Goa next weekend"></textarea></div>
+              <div class="form-group"><label class="form-label">Sender (optional)</label><input type="text" id="test-sender" placeholder="919876543210"></div>
+              <button class="btn btn-primary" onclick="simulateMessage()">Process</button>
+              <pre id="message-result" style="margin-top: 16px; padding: 12px; background: var(--bg-tertiary); border-radius: 6px; overflow-x: auto; font-size: 0.85rem;"></pre>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">🤖 AI Chat Test</span></div>
+            <div class="card-body padded">
+              <div class="form-group"><label class="form-label">Ask Argus AI</label><textarea id="test-chat" rows="3" placeholder="What events do I have coming up?"></textarea></div>
+              <button class="btn btn-primary" onclick="testChat()">Send</button>
+              <pre id="chat-result" style="margin-top: 16px; padding: 12px; background: var(--bg-tertiary); border-radius: 6px; overflow-x: auto; font-size: 0.85rem; white-space: pre-wrap;"></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Settings Section -->
+      <section class="section" id="settings">
+        <div class="header"><h1>Settings</h1></div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">API Endpoints</span></div>
+          <div class="card-body padded">
+            <pre style="background: var(--bg-tertiary); padding: 16px; border-radius: 6px; font-size: 0.85rem;">
+Argus API Endpoints:
+────────────────────────────────────────
+GET  /api/health                  Health check
+GET  /api/stats                   Combined statistics
+GET  /api/events                  List events (?status=discovered|scheduled|...)
+GET  /api/events/:id              Get single event
+POST /api/events/:id/set-reminder Schedule event (discovered → scheduled)
+POST /api/events/:id/snooze       Snooze event (body: {minutes: 30})
+POST /api/events/:id/ignore       Ignore event
+POST /api/events/:id/complete     Mark as complete
+POST /api/events/:id/dismiss      Dismiss notification
+POST /api/events/:id/acknowledge  Acknowledge reminder
+DELETE /api/events/:id            Delete event permanently
+POST /api/webhook/whatsapp        WhatsApp webhook
+POST /api/context-check           Check URL context
+POST /api/chat                    AI Chat (body: {query, history})
+
+WhatsApp (Evolution PostgreSQL):
+────────────────────────────────────────
+GET  /api/whatsapp/messages   All messages (fromMe, isGroup, search)
+GET  /api/whatsapp/search?q=  Search messages
+GET  /api/whatsapp/contacts   Contacts list
+GET  /api/whatsapp/chats      Chat list
+GET  /api/whatsapp/instances  WhatsApp instances
+GET  /api/whatsapp/stats      WhatsApp statistics
+
+WebSocket: ws://localhost:3000
+────────────────────────────────────────
+            </pre>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    const API = '';
+    let logs = [];
+    let currentFilter = 'discovered';
+
+    document.querySelectorAll('.nav-item').forEach(function(item) {
+      item.addEventListener('click', function() { showSection(item.dataset.section); });
+    });
+
+    function showSection(sectionId) {
+      document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelector('[data-section="' + sectionId + '"]').classList.add('active');
+      document.getElementById(sectionId).classList.add('active');
+      if (sectionId === 'whatsapp') refreshWhatsApp();
+    }
+
+    document.querySelectorAll('.tab').forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+        currentFilter = tab.dataset.filter;
+        refreshEvents();
+      });
+    });
+
+    function addLog(type, message) {
+      var now = new Date();
+      var time = now.toLocaleTimeString('en-US', { hour12: false }).slice(0, 5);
+      logs.unshift({ time: time, type: type, message: message });
+      if (logs.length > 100) logs.pop();
+      renderLogs();
+    }
+
+    function renderLogs() {
+      var html = logs.slice(0, 50).map(function(l) {
+        return '<div class="log-entry"><span class="log-time">' + l.time + '</span><span class="log-type ' + l.type + '">' + l.type.toUpperCase() + '</span><span class="log-message">' + l.message + '</span></div>';
+      }).join('');
+      document.getElementById('live-logs').innerHTML = html || '<div class="empty-state">No activity yet</div>';
+      document.getElementById('system-logs').innerHTML = html || '<div class="empty-state">No logs</div>';
+    }
+
+    function clearLogs() { logs = []; renderLogs(); }
+
+    function escapeHtml(text) {
+      var div = document.createElement('div');
+      div.textContent = text || '';
+      return div.innerHTML;
+    }
+
+    function showToast(title, body, eventId) {
+      var container = document.getElementById('toast-container');
+      var toast = document.createElement('div');
+      toast.className = 'toast';
+      var actionsHtml = eventId ? '<div class="toast-actions"><button class="btn btn-sm btn-success" onclick="scheduleEvent(' + eventId + '); this.closest(\'.toast\').remove();">📅 Schedule</button><button class="btn btn-sm btn-warning" onclick="snoozeEvent(' + eventId + '); this.closest(\'.toast\').remove();">💤 Later</button><button class="btn btn-sm btn-secondary" onclick="ignoreEvent(' + eventId + '); this.closest(\'.toast\').remove();">🚫 Ignore</button></div>' : '';
+      toast.innerHTML = '<div class="toast-header"><span class="toast-title">🔔 ' + title + '</span><span class="toast-close" onclick="this.closest(\'.toast\').remove()">✕</span></div><div class="toast-body">' + body + '</div>' + actionsHtml;
+      container.appendChild(toast);
+      setTimeout(function() { toast.remove(); }, 10000);
+      if (Notification.permission === 'granted') new Notification(title, { body: body });
+    }
+
+    if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
+
+    async function fetchHealth() {
+      try {
+        var res = await fetch(API + '/api/health');
+        var data = await res.json();
+        document.getElementById('status-dot').classList.remove('offline');
+        document.getElementById('status-text').textContent = 'Online';
+        document.getElementById('model-name').textContent = data.model || 'Unknown';
+        document.getElementById('pg-status').textContent = data.evolutionDb || 'disconnected';
+      } catch (e) {
+        document.getElementById('status-dot').classList.add('offline');
+        document.getElementById('status-text').textContent = 'Offline';
+      }
+    }
+
+    async function fetchStats() {
+      try {
+        var res = await fetch(API + '/api/stats');
+        var data = await res.json();
+        document.getElementById('stat-events').textContent = data.events || 0;
+        document.getElementById('stat-pending').textContent = (data.discoveredEvents || 0) + (data.snoozedEvents || 0);
+        document.getElementById('stat-completed').textContent = data.completedEvents || 0;
+        document.getElementById('stat-scheduled').textContent = data.scheduledEvents || 0;
+        document.getElementById('pending-badge').textContent = (data.discoveredEvents || 0) + (data.snoozedEvents || 0);
+        if (data.evolution) {
+          document.getElementById('stat-wa-messages').textContent = data.evolution.totalMessages || 0;
+        }
+      } catch (e) { console.error('Stats error:', e); }
+    }
+
+    // Get action buttons based on event status
+    function getEventActions(e, compact) {
+      var id = e.id;
+      if (compact) {
+        // Compact buttons for table (icons only)
+        switch (e.status) {
+          case 'discovered':
+            return '<button class="btn btn-sm btn-success" onclick="scheduleEvent(' + id + ')" title="Schedule">📅</button>' +
+                   '<button class="btn btn-sm btn-warning" onclick="snoozeEvent(' + id + ')" title="Snooze 30min">💤</button>' +
+                   '<button class="btn btn-sm btn-secondary" onclick="ignoreEvent(' + id + ')" title="Ignore">🚫</button>';
+          case 'scheduled':
+            return '<button class="btn btn-sm btn-success" onclick="completeEvent(' + id + ')" title="Done">✅</button>' +
+                   '<button class="btn btn-sm btn-warning" onclick="snoozeEvent(' + id + ')" title="Snooze">💤</button>';
+          case 'snoozed':
+            return '<button class="btn btn-sm btn-success" onclick="scheduleEvent(' + id + ')" title="Schedule">📅</button>' +
+                   '<button class="btn btn-sm btn-secondary" onclick="ignoreEvent(' + id + ')" title="Ignore">🚫</button>';
+          case 'ignored':
+            return '<button class="btn btn-sm btn-primary" onclick="scheduleEvent(' + id + ')" title="Restore">↩️</button>' +
+                   '<button class="btn btn-sm btn-danger" onclick="deleteEvent(' + id + ')" title="Delete">🗑️</button>';
+          case 'completed':
+            return '<button class="btn btn-sm btn-danger" onclick="deleteEvent(' + id + ')" title="Delete">🗑️</button>';
+          default:
+            return '';
+        }
+      } else {
+        // Full buttons for recent events (text + icons)
+        switch (e.status) {
+          case 'discovered':
+            return '<button class="btn btn-sm btn-success" onclick="scheduleEvent(' + id + ')">📅 Schedule</button>' +
+                   '<button class="btn btn-sm btn-warning" onclick="snoozeEvent(' + id + ')">💤 Later</button>' +
+                   '<button class="btn btn-sm btn-secondary" onclick="ignoreEvent(' + id + ')">🚫 Ignore</button>';
+          case 'scheduled':
+            return '<button class="btn btn-sm btn-success" onclick="completeEvent(' + id + ')">✅ Done</button>' +
+                   '<button class="btn btn-sm btn-warning" onclick="snoozeEvent(' + id + ')">💤 Snooze</button>';
+          case 'snoozed':
+            return '<button class="btn btn-sm btn-success" onclick="scheduleEvent(' + id + ')">📅 Schedule</button>' +
+                   '<button class="btn btn-sm btn-secondary" onclick="ignoreEvent(' + id + ')">🚫 Ignore</button>';
+          case 'ignored':
+            return '<button class="btn btn-sm btn-primary" onclick="scheduleEvent(' + id + ')">↩️ Restore</button>';
+          default:
+            return '';
+        }
+      }
+    }
+
+    async function refreshEvents() {
+      try {
+        var statusParam = currentFilter === 'all' ? '' : '&status=' + currentFilter;
+        var res = await fetch(API + '/api/events?limit=100' + statusParam);
+        var events = await res.json();
+
+        var recentHtml = events.slice(0, 5).map(function(e) {
+          var actions = getEventActions(e, false);
+          return '<tr><td>' + escapeHtml(e.title || 'Untitled') + '</td><td>' + escapeHtml(e.location || '-') + '</td><td><span class="badge badge-' + e.status + '">' + e.status + '</span></td><td><div class="btn-group">' + actions + '</div></td></tr>';
+        }).join('');
+        document.getElementById('recent-events').innerHTML = recentHtml || '<tr><td colspan="4" class="empty-state">No events</td></tr>';
+
+        var tableHtml = events.map(function(e) {
+          var actions = getEventActions(e, true);
+          var dateStr = e.event_time ? new Date(e.event_time * 1000).toLocaleDateString() : '-';
+          return '<tr><td><strong>' + escapeHtml(e.title || 'Untitled') + '</strong><br><small style="color: var(--text-secondary)">' + escapeHtml(e.description || '') + '</small></td><td>' + escapeHtml(e.location || '-') + '</td><td>' + dateStr + '</td><td><span class="badge badge-' + e.status + '">' + e.status + '</span></td><td><div class="btn-group">' + actions + '</div></td></tr>';
+        }).join('');
+        document.getElementById('events-table').innerHTML = tableHtml || '<tr><td colspan="5" class="empty-state">No events</td></tr>';
+      } catch (e) { console.error('Events error:', e); }
+    }
+
+    async function refreshWhatsApp() {
+      try {
+        var filterType = document.getElementById('wa-filter-type').value;
+        var filterChat = document.getElementById('wa-filter-chat').value;
+        var search = document.getElementById('wa-search').value;
+        
+        var params = '?limit=100';
+        if (filterType === 'sent') params += '&fromMe=true';
+        else if (filterType === 'received') params += '&fromMe=false';
+        if (filterChat === 'private') params += '&isGroup=false';
+        else if (filterChat === 'group') params += '&isGroup=true';
+        if (search) params += '&search=' + encodeURIComponent(search);
+
+        var res = await fetch(API + '/api/whatsapp/messages' + params);
+        var messages = await res.json();
+
+        var html = messages.map(function(m) {
+          var time = new Date(m.timestamp).toLocaleString();
+          var badge = m.fromMe ? '<span class="badge badge-sent">Sent</span>' : '<span class="badge badge-received">Received</span>';
+          var content = m.content || '[Media]';
+          if (content.length > 100) content = content.substring(0, 100) + '...';
+          return '<tr><td>' + time + '</td><td class="msg-from">' + escapeHtml(m.pushName || '-') + '</td><td class="msg-phone">' + escapeHtml(m.phoneNumber) + '</td><td class="msg-preview">' + escapeHtml(content) + '</td><td>' + badge + '</td></tr>';
+        }).join('');
+        document.getElementById('whatsapp-table').innerHTML = html || '<tr><td colspan="5" class="empty-state">No messages</td></tr>';
+      } catch (e) {
+        document.getElementById('whatsapp-table').innerHTML = '<tr><td colspan="5" class="empty-state">Evolution DB not connected</td></tr>';
+      }
+    }
+
+    // ============ Event Actions ============
+
+    // Schedule event (approve for reminders)
+    async function scheduleEvent(id) {
+      try {
+        await fetch(API + '/api/events/' + id + '/set-reminder', { method: 'POST' });
+        addLog('success', 'Event #' + id + ' scheduled for reminders');
+        showToast('📅 Event Scheduled', 'You will receive context reminders when visiting related sites');
+        refreshEvents();
+        fetchStats();
+      } catch (e) { addLog('error', 'Failed to schedule: ' + e.message); }
+    }
+
+    // Snooze event (remind again in 30 minutes)
+    async function snoozeEvent(id) {
+      try {
+        await fetch(API + '/api/events/' + id + '/snooze', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ minutes: 30 }) });
+        addLog('info', 'Event #' + id + ' snoozed for 30 minutes');
+        showToast('💤 Snoozed', 'Will remind you again in 30 minutes');
+        refreshEvents();
+        fetchStats();
+      } catch (e) { addLog('error', 'Failed to snooze: ' + e.message); }
+    }
+
+    // Ignore event (user doesn't care, hide but don't delete)
+    async function ignoreEvent(id) {
+      try {
+        await fetch(API + '/api/events/' + id + '/ignore', { method: 'POST' });
+        addLog('warning', 'Event #' + id + ' ignored');
+        refreshEvents();
+        fetchStats();
+      } catch (e) { addLog('error', 'Failed to ignore: ' + e.message); }
+    }
+
+    // Complete event (mark as done)
+    async function completeEvent(id) {
+      try {
+        await fetch(API + '/api/events/' + id + '/complete', { method: 'POST' });
+        addLog('success', 'Event #' + id + ' completed');
+        showToast('✅ Done', 'Event marked as completed');
+        refreshEvents();
+        fetchStats();
+      } catch (e) { addLog('error', 'Failed to complete: ' + e.message); }
+    }
+
+    // Delete event permanently
+    async function deleteEvent(id) {
+      if (!confirm('Delete this event permanently? This cannot be undone.')) return;
+      try {
+        await fetch(API + '/api/events/' + id, { method: 'DELETE' });
+        addLog('warning', 'Event #' + id + ' deleted permanently');
+        refreshEvents();
+        fetchStats();
+      } catch (e) { addLog('error', 'Failed to delete: ' + e.message); }
+    }
+
+    // Legacy aliases
+    var rejectEvent = deleteEvent;
+
+    async function testContext() {
+      var url = document.getElementById('test-url').value;
+      var title = document.getElementById('test-title').value;
+      var result = document.getElementById('context-result');
+      if (!url) { result.textContent = 'Please enter a URL'; return; }
+      result.textContent = 'Checking...';
+      try {
+        var res = await fetch(API + '/api/context-check', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: url, title: title }) });
+        var data = await res.json();
+        result.textContent = JSON.stringify(data, null, 2);
+        addLog('info', 'Context check: ' + url);
+      } catch (e) { result.textContent = 'Error: ' + e.message; }
+    }
+
+    async function simulateMessage() {
+      var message = document.getElementById('test-message').value;
+      var sender = document.getElementById('test-sender').value || '919876543210';
+      var result = document.getElementById('message-result');
+      if (!message) { result.textContent = 'Please enter a message'; return; }
+      result.textContent = 'Processing...';
+      try {
+        var res = await fetch(API + '/api/webhook/whatsapp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            event: 'messages.upsert',
+            instance: 'test',
+            data: {
+              key: { remoteJid: sender + '@s.whatsapp.net', fromMe: false, id: Date.now().toString() },
+              message: { conversation: message },
+              messageTimestamp: Math.floor(Date.now() / 1000),
+              pushName: 'Test User'
+            }
+          })
+        });
+        var data = await res.json();
+        result.textContent = JSON.stringify(data, null, 2);
+        addLog('success', 'Message processed: ' + data.eventsCreated + ' events');
+        refreshEvents();
+        fetchStats();
+      } catch (e) { result.textContent = 'Error: ' + e.message; }
+    }
+
+    async function testChat() {
+      var query = document.getElementById('test-chat').value;
+      var result = document.getElementById('chat-result');
+      if (!query) { result.textContent = 'Please enter a question'; return; }
+      result.textContent = 'Thinking...';
+      try {
+        var res = await fetch(API + '/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ query: query }) });
+        var data = await res.json();
+        result.textContent = data.response + '\n\n--- Referenced Events: ' + (data.events ? data.events.length : 0) + ' ---\n' + (data.events || []).map(function(e) { return '#' + e.id + ' ' + e.title + ' (' + e.status + ')'; }).join('\n');
+        addLog('info', 'AI Chat: ' + query.substring(0, 50));
+      } catch (e) { result.textContent = 'Error: ' + e.message; }
+    }
+
+    function connectWebSocket() {
+      var ws = new WebSocket('ws://' + location.host);
+      ws.onopen = function() { addLog('info', 'WebSocket connected'); };
+      ws.onmessage = function(e) {
+        try {
+          var data = JSON.parse(e.data);
+          var shouldRefresh = true;
+          
+          switch(data.type) {
+            case 'notification':
+              // New event discovered from WhatsApp
+              showToast('New Event!', (data.event.title || 'Event') + ' - ' + (data.event.location || 'No location'), data.event.id);
+              addLog('info', 'New event: ' + data.event.title);
+              break;
+            case 'context_reminder':
+              addLog('info', 'Context trigger: ' + (data.event?.title || 'unknown'));
+              break;
+            case 'new_events':
+              addLog('info', data.count + ' new events created');
+              break;
+            case 'event_updated':
+              addLog('success', 'Event #' + data.eventId + ' ' + data.status);
+              break;
+            case 'event_scheduled':
+              addLog('success', 'Event #' + data.eventId + ' scheduled');
+              break;
+            case 'event_snoozed':
+              addLog('info', 'Event #' + data.eventId + ' snoozed');
+              break;
+            case 'event_ignored':
+              addLog('warning', 'Event #' + data.eventId + ' ignored');
+              break;
+            case 'event_completed':
+              addLog('success', 'Event #' + data.eventId + ' completed');
+              break;
+            case 'event_deleted':
+              addLog('warning', 'Event #' + data.eventId + ' deleted');
+              break;
+            case 'event_dismissed':
+              addLog('info', 'Event dismissed');
+              break;
+            case 'event_acknowledged':
+              addLog('info', 'Event #' + data.eventId + ' acknowledged');
+              break;
+            default:
+              console.log('WS unknown:', data);
+              shouldRefresh = false;
+          }
+          
+          if (shouldRefresh) {
+            refreshEvents();
+            fetchStats();
+          }
+        } catch (err) { console.log('WS parse error:', e.data); }
+      };
+      ws.onclose = function() { addLog('warning', 'WebSocket disconnected'); setTimeout(connectWebSocket, 3000); };
+    }
+
+    fetchHealth();
+    fetchStats();
+    refreshEvents();
+    connectWebSocket();
+    addLog('info', 'Dashboard initialized');
+    setInterval(function() { fetchHealth(); fetchStats(); }, 30000);
+  </script>
+</body>
+</html>

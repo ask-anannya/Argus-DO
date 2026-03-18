@@ -1,0 +1,499 @@
+2/2/26, 9:46 PM - Messages and calls are end-to-end encrypted. Only people in this chat can read, listen to, or share them. Learn more.
+2/2/26, 9:46 PM - Akshat @client @nityam created this group
+2/2/26, 9:46 PM - Akshat @client @nityam added you
+2/2/26, 9:46 PM - NSheth.in: heyy
+2/2/26, 9:47 PM - Akshat @client @nityam: Hi
+2/2/26, 9:57 PM - Akshat @client @nityam changed the group name from "~ Akshat & +91 84465 42360" to "Argus"
+2/2/26, 9:57 PM - NSheth.in: I will share a proper architecture file , md as well mmd
+2/2/26, 10:01 PM - NSheth.in: <Media omitted>
+2/2/26, 10:02 PM - NSheth.in: <Media omitted>
+2/2/26, 10:02 PM - NSheth.in: @⁨~Yaana⁩ do check it
+2/2/26, 10:02 PM - NSheth.in: as we have 3 llm calls,  2-3 diff diff DB type and formates and more
+2/2/26, 10:02 PM - NSheth.in: as if we add more feature it will go more complex
+2/2/26, 10:03 PM - +91 84465 42360: I am thoda caught up in something will check and let you know in an hr or so
+2/2/26, 10:03 PM - NSheth.in: sure :also share me your GITHUB
+2/2/26, 10:03 PM - NSheth.in: I have code in PVT repo
+2/2/26, 10:04 PM - Akshat @client @nityam: Instead of gpt we'll use gemini right
+2/2/26, 10:04 PM - Akshat @client @nityam: And about database we'll confirm
+2/2/26, 10:05 PM - NSheth.in: I am checking that : as OPEN AI : gives : EMBEDDING MODEL : that google does not have
+2/2/26, 10:05 PM - NSheth.in: so we have to use 2 API for AI
+2/2/26, 10:05 PM - NSheth.in: open ai + gemini
+2/2/26, 10:05 PM - Akshat @client @nityam: Well we need to use gemini api it's mandatory so
+2/2/26, 10:05 PM - Akshat @client @nityam: It should have but do check
+2/2/26, 10:05 PM - NSheth.in: ...
+2/2/26, 10:06 PM - Akshat @client @nityam: See the thing is that could put of an impression ki gemini can't do this thing and that's gonna be a bit negative using openai api with Gemini but ok let's see <This message was edited>
+2/2/26, 10:07 PM - Akshat @client @nityam: Just search if gemini has what's needed or not
+2/2/26, 10:08 PM - Akshat @client @nityam: Is there any api other than open ai we can go for?
+2/2/26, 10:08 PM - NSheth.in: so it should be of google correct ?
+2/2/26, 10:08 PM - Akshat @client @nityam: Yes
+2/2/26, 10:08 PM - NSheth.in: ok : let me check
+2/2/26, 10:08 PM - Akshat @client @nityam: Alright
+2/2/26, 10:09 PM - NSheth.in: will update that :
+2/2/26, 10:09 PM - NSheth.in: have to check compatibity
+2/2/26, 10:11 PM - NSheth.in: <Media omitted>
+2/2/26, 10:11 PM - NSheth.in: @⁨Akshat @client @nityam⁩ you ahve to read this pdf
+2/2/26, 10:14 PM - NSheth.in: @⁨Akshat @client @nityam⁩ : you have to read it till : DATABASE : like all content till database heading (exlcude database after that content)
+2/2/26, 10:28 PM - NSheth.in: we have to use : GEMINI AS LLM and OPEN AI for EMBEDDING  
+
+LLM_PROVIDER=google  
+GOOGLE_API_KEY=your_gemini_api_key
+GOOGLE_MODEL_SMALL=gemini-2.5-flash-lite
+GOOGLE_MODEL_BIG=gemini-2.5-flash
+# OpenAI (still needed for embeddings)
+OPENAI_API_KEY=your_openai_key
+OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+2/2/26, 10:28 PM - NSheth.in: so we little bit lock here and there : like DB and LLM LLM is GOOGLE OFC , while vector is manged by openai
+2/2/26, 10:29 PM - NSheth.in: I am closing off the app for today : have made it almost there
+2/2/26, 10:31 PM - NSheth.in: <Media omitted>
+2/2/26, 10:34 PM - Akshat @client @nityam: Chalo let's discuss the UI thoda later
+2/2/26, 10:34 PM - Akshat @client @nityam: I'll read all the things you've sent
+2/2/26, 10:39 PM - NSheth.in: I need : OPEN AI API + GEMINI API KEY 
+
+also gemini : from google ai studio or google cloud : I need openai compatible api from GEMINI :
+2/2/26, 10:39 PM - NSheth.in: for giving context : 35,699 this is my token usage after compression : it includes maybe 200MSG AND more
+2/2/26, 10:40 PM - NSheth.in: so you both check all stuff : review them and keep me updated
+2/2/26, 10:40 PM - Akshat @client @nityam: yup will do
+2/2/26, 10:43 PM - NSheth.in: if you dont mind : what are outlines and rules of hackathon, 
+
+so I can do according to that
+2/2/26, 10:44 PM - NSheth.in: make edits and all
+2/2/26, 10:44 PM - Akshat @client @nityam: I'll send the link
+2/2/26, 10:44 PM - Akshat @client @nityam: https://gemini3.devpost.com/?ref_feature=challenge&ref_medium=your-open-hackathons&ref_content=Submissions+open&_gl=1*39u6o3*_gcl_au*MzE2MDk2OTE5LjE3NjY0OTkxODc.*_ga*Mjc0NTIxNTM0LjE3NjY0OTkxODg.*_ga_0YHJK3Y10M*czE3NzAwNTI0NjgkbzUwJGcwJHQxNzcwMDUyNDY4JGo2MCRsMCRoMA..
+2/3/26, 11:15 AM - NSheth.in: any updates guys
+2/3/26, 11:16 AM - NSheth.in: as I have to update the code to use gemini : na : so api key needed as well
+2/3/26, 11:18 AM - +91 84465 42360: yes
+2/3/26, 11:18 AM - +91 84465 42360: i will give an update in an hr or so sorry @⁨NSheth.in⁩NSheth.in its just a serious situation came in kal that i had to deal with
+2/3/26, 11:48 AM - NSheth.in: ok 👍
+2/3/26, 11:59 AM - +91 84465 42360: it looks good @⁨NSheth.in⁩NSheth.in  i have no change from my side
+2/3/26, 11:59 AM - +91 84465 42360: we can work on ui if possible
+2/3/26, 12:07 PM - NSheth.in: yes Ui needs , currently i just made it so i can see what is going on
+2/3/26, 12:07 PM - NSheth.in: so did you see that architecture pdf correct
+2/3/26, 12:07 PM - NSheth.in: so just gemini llm we need to update 
+
+gemini + open ai
+2/3/26, 2:08 PM - NSheth.in: @⁨~Yaana⁩ is database ok ? posgres , sql lite , redis and 1 more is there as vector
+2/3/26, 2:36 PM - +91 84465 42360: Yea its fine
+2/3/26, 2:36 PM - +91 84465 42360: It's demanding
+2/3/26, 2:36 PM - +91 84465 42360: But
+2/3/26, 2:36 PM - +91 84465 42360: Where you using vector btw
+2/3/26, 2:36 PM - NSheth.in: yes it is there faiss need that
+2/3/26, 4:09 PM - NSheth.in: also I suggest : to check :architecture pdf : that have diagram and all db as symbol and Name of tech we user were and what
+2/3/26, 4:19 PM - +91 84465 42360: Oh yes right you would need vector db for that
+2/3/26, 4:19 PM - +91 84465 42360: Yes yes I did read that
+2/3/26, 4:20 PM - NSheth.in: <Media omitted>
+2/3/26, 5:21 PM - NSheth.in: # : like llm and our system is making new events when we want to updatei t 
+
+
+like : msg 1 : meet tomm 5pm 
+msg 2 : now at 11 PM 
+so it made new event  : AS LLM dont have context : 
+
+
+solution : adding last 5 msg to llm as well of that chat : so it know what are we talking on
+2/3/26, 5:21 PM - NSheth.in: @⁨~Yaana⁩ what you think ?
+2/3/26, 5:37 PM - NSheth.in: can @⁨Akshat @client @nityam⁩ or @⁨~Yaana⁩  : SEND me test case 
+
+4-5 diff type of msg blocks 
+
+like eg 
+
+usre1 : lets do meet today
+user2 : lets do it at 1 PM 
+
+so above is 1 MSG block 
+
+need this type of 4-5 : so I can test it and ai can run similar task and triggers
+2/3/26, 6:25 PM - Akshat @client @nityam: Let's do meet at 7pm
+2/3/26, 6:25 PM - NSheth.in: https://demo3002.nsheth.in/ : it is running on my pc : you can cehck UI
+2/3/26, 6:26 PM - Akshat @client @nityam: And get that thing done by 8pm
+2/3/26, 9:05 PM - +91 84465 42360: @⁨NSheth.in⁩NSheth.in  are you adding contet
+2/3/26, 9:08 PM - +91 84465 42360: abhi ?
+2/3/26, 9:08 PM - +91 84465 42360: koi i couldnt find context
+2/3/26, 9:11 PM - +91 84465 42360: <Media omitted>
+2/3/26, 9:12 PM - +91 84465 42360: plus @⁨NSheth.in⁩NSheth.in i cant see the connection between point A and point B ka koi example
+2/3/26, 9:12 PM - +91 84465 42360: its just setting reminders i guess
+2/3/26, 9:14 PM - NSheth.in: yes , like UPDATE , ADD , also like we wanted this type na , ki like all type of remidner it taks 
+
+
+also that SS TEST USER IS testing and not realthing it is just to run ai and all not usable 
+you can msg me in dm : for meeting and all , like meeting at this time for this , 
+
+
+so it have more to it
+2/3/26, 9:14 PM - NSheth.in: you have to test it : as too many things are added
+2/3/26, 9:16 PM - NSheth.in: @⁨~Yaana⁩ now check web ui and event
+2/3/26, 9:16 PM - NSheth.in: <Media omitted>
+2/3/26, 9:20 PM - Akshat @client @nityam: @⁨NSheth.in⁩ can we get on a meet, or call rn? <This message was edited>
+2/3/26, 9:21 PM - +91 84465 42360: My point being is this is just registering tasks it's like motion
+2/3/26, 9:21 PM - +91 84465 42360: Notion
+2/3/26, 9:24 PM - +91 84465 42360: my question is that if an user is asked to bring cashew from goa and the user is on make my trip then does it see the tab and reminds you to get kajju for your friend
+2/3/26, 9:26 PM - +91 84465 42360: does the task stand till 3 months on dashboard or it reminds you after 3 months
+2/3/26, 9:30 PM - +91 84465 42360: Yea this good
+2/3/26, 9:31 PM - NSheth.in: amm : let do tomm , like I can do chat today
+2/3/26, 9:31 PM - NSheth.in: see : like if it like cashew na ; then like it  will make trigger in advance na ?
+2/3/26, 9:32 PM - NSheth.in: also if we add more to it like : let me check
+2/3/26, 9:32 PM - Akshat @client @nityam: not advance, proactive
+2/3/26, 9:32 PM - NSheth.in: ok let me work on it
+2/3/26, 9:33 PM - Akshat @client @nityam: ki if she's in goa she'll get the notification then or if she messages elsewhere that she reached goa or something like that or say is browsing makemytrip looking at goa hotels or flights. whatever way possible
+2/3/26, 9:33 PM - Akshat @client @nityam: and
+2/3/26, 9:34 PM - NSheth.in: give me more example for this type of case
+2/3/26, 9:34 PM - NSheth.in: like give me 5-6 of thme
+2/3/26, 9:34 PM - NSheth.in: with flow if possible
+2/3/26, 9:43 PM - Akshat @client @nityam: We'll send that in a bit
+2/3/26, 9:43 PM - Akshat @client @nityam: And tomorrow what time can we have meeting
+2/3/26, 9:47 PM - NSheth.in: : after lunch
+2/3/26, 9:47 PM - NSheth.in: 3:30 ?
+2/3/26, 9:47 PM - NSheth.in: after 3:30 anytime I can join
+2/3/26, 10:15 PM - NSheth.in: @⁨Akshat @client @nityam⁩ by the did you got any notification on : 9 PM today from app : or any missed notification ?
+2/3/26, 10:15 PM - NSheth.in: *btw
+2/3/26, 10:16 PM - Akshat @client @nityam: Let me check
+2/3/26, 10:16 PM - Akshat @client @nityam: @⁨~Yaana⁩ works?
+2/3/26, 10:16 PM - Akshat @client @nityam: No I didn't
+2/3/26, 10:16 PM - Akshat @client @nityam: So that needs to be worked
+2/3/26, 10:16 PM - NSheth.in: ok
+2/3/26, 10:16 PM - Akshat @client @nityam: Test notification on pressing the button I'm getting but actual notifications need work <This message was edited>
+2/3/26, 10:17 PM - +91 84465 42360: Yea
+2/3/26, 10:31 PM - Akshat @client @nityam: Nityam right now all the events are getting detected and being put in dashboard see we get its in testing phase rn but we're clearing up the final scope which is when such an event is detected whatever it maybe, the system automatically takes it keeps it and and reminds at appropriate time, like if theres a meeting message detected the user doesnt have to come to the dashboard and accept it, simply a notification will pop up, xyz meeeting or hangout detected would you like to set reminder with a yes or no, thats all the user has to do manual work wise and stuff like goa it will be proactive, the user shouldnt have to come to dashboard and check and approve things, it should be seamless so that user doesnt really need to come to our app to do anything manually like notion, so thats the kind of user flow and functionality we want.
+2/3/26, 10:31 PM - Akshat @client @nityam: these are few of the things we wanted to clear up
+2/3/26, 10:31 PM - Akshat @client @nityam: and the context and relation between 2 messages you know
+2/3/26, 10:45 PM - NSheth.in: okk man
+2/3/26, 11:38 PM - NSheth.in: @⁨~Yaana⁩  : https://github.com/nityam2007/whatsapp-chat-rmd/blob/main/docs/ARCHITECTURE.md  ::: NEED SUGGESTION ON IT ,   skip the one that have error i.e 3 , 4 diagram ,  : CHECK REST and give me something : like for architecture change so it can work for our case 
+
+Like if you have idea we can do that instead of this : will appricaite it
+2/3/26, 11:41 PM - +91 84465 42360: Okay lemme see
+2/3/26, 11:41 PM - +91 84465 42360: I am not able access
+2/3/26, 11:41 PM - NSheth.in: like : it is got so complex currently,  that each goal have its own system
+2/3/26, 11:41 PM - +91 84465 42360: Yea I get it
+2/3/26, 11:41 PM - NSheth.in: did you accepted join? as collaboration?
+2/3/26, 11:42 PM - NSheth.in: like github notifications me hoga
+2/3/26, 11:42 PM - +91 84465 42360: Oh shit lemme
+2/3/26, 11:42 PM - +91 84465 42360: Yea
+2/3/26, 11:42 PM - +91 84465 42360: Btw we can give 5 examples
+2/3/26, 11:42 PM - +91 84465 42360: Implement only those
+2/3/26, 11:42 PM - +91 84465 42360: Utna ki we can show in
+2/3/26, 11:43 PM - +91 84465 42360: Demo
+2/3/26, 11:43 PM - NSheth.in: yeah , like 
+
+you saw old one na old architecture 
+
+so for proactive it made one more system , 
+
+so that's whay I ask ,, If you hsve suggestions for that changes
+2/3/26, 11:44 PM - NSheth.in: take your time , and check and lets see what we can
+2/3/26, 11:45 PM - +91 84465 42360: yea i did
+2/3/26, 11:46 PM - +91 84465 42360: i will share the exxamples and scenarios shortly
+2/3/26, 11:46 PM - NSheth.in: ok
+2/4/26, 12:11 AM - +91 84465 42360: 1. The "Goa Cashew" Scenario (Travel & Social)
+
+* The History:  Months ago, in a messy WhatsApp group chat, a friend (Rahul) recommended a specific shop in Goa for cashews.
+* The Trigger: You are browsing a flight booking site or a Goa travel blog.
+* Argus Action:  It interrupts with a card: "Rahul recommended the cashews at 'Zantye’s' in Goa. Want me to pin the location to your maps?"
+
+ 2. The "Insurance Accuracy" Scenario (Financial Intelligence)
+
+* The History: You mentioned in a chat four months ago that you own a 2018 Honda Civic.
+* The Trigger: You are on an insurance portal filling out a quote, and the site auto-fills "2022 Honda" by default.
+* Argus Action:  It highlights the field: "I remember you have a 2018 model. This quote is for a 2022 model, which will cost you more. Click here to correct it."
+
+ 3. The "Gift Intent" Scenario (E-commerce)
+
+* The History: A family member mentioned a specific brand of sneakers they liked during a random conversation weeks ago.
+* The Trigger:  You land on a shopping site like Amazon or Myntra during a sale.
+* Argus Action:  It displays an  Insight Card : "Your sister mentioned she loved these sneakers. They are 30% off right now. Perfect for her birthday next month?"
+
+4. The "Netflix Subscription" Scenario (Budgeting)
+
+* The History:  You wrote a note or sent an email saying, "I need to cancel Netflix after this show ends."
+* The Trigger:  You open your banking app or land on the Netflix landing page.
+* Argus Action:  A  Priority Alert : "You planned to cancel this subscription. Should I help you navigate to the cancellation page now?"
+
+5. The "Calendar Conflict" Scenario (Scheduling)
+
+* The History:  You made an informal commitment to a dinner plan in a group chat, but never added it to your calendar.
+* The Trigger: You are currently typing an email to schedule a business meeting for that same Thursday night.
+* Argus Action:  A Conflict Warning: "You told the 'Dinner Group' you’d meet them this Thursday. This meeting will conflict. Suggest Friday instead?"
+2/4/26, 12:25 AM - +91 84465 42360: dekh rahi hoon mai repo
+2/4/26, 10:29 AM - +91 84465 42360: @⁨NSheth.in⁩NSheth.in i went through the architecture the problem that identified yesterday also is that the current system is reactive not proactive 
+what flow we desire is 
+WhatsApp msg → Extract event → Store
+                              ↓
+User books Goa flight → Browser detects
+                              ↓
+Query events:  Anything about Goa?
+                              ↓
+Proactive  Notification :  Rahul's cashews
+2/4/26, 10:35 AM - NSheth.in: ok will check it and update on the go  , like I was thinking to refomate the ARCH like to redesing some areas to reduce complex in a way that it does task simpley
+2/4/26, 10:38 AM - +91 84465 42360: what we can do is that we can connect and api to the chrome extension that can browse activities like make my trip and amazon
+2/4/26, 10:39 AM - +91 84465 42360: and abhi na context aware triggers nahi aa rahe hai
+2/4/26, 10:39 AM - NSheth.in: I can check it as well : AT CURRENT stage : I am keeping it to WHATSAPP only + PROACTIVE
+2/4/26, 10:40 AM - NSheth.in: so that : WE GET something working
+2/4/26, 10:40 AM - NSheth.in: first and then we can add other API on the go
+2/4/26, 10:41 AM - +91 84465 42360: yea how you planning to make it proactive
+2/4/26, 10:42 AM - +91 84465 42360: edhar bhi if we add a chrome extension so we will get to know ki what user is doing and is this reminder relevant to strike now
+2/4/26, 10:42 AM - +91 84465 42360: isliye i was asking to add a chrome extension
+2/4/26, 10:44 AM - NSheth.in: yeah : whats the point na : currently system is not able to detect event on content : so first we work on that : that , as website : will have more context
+2/4/26, 10:44 AM - NSheth.in: so we have to first make base to make it workiging
+2/4/26, 10:47 AM - +91 84465 42360: like we can get input from chrome extension and when the user is on make my trip and the activity is travel_search and the keywords being goa , flights 
+Query SQLite:              
+SELECT events WHERE         
+  location LIKE 'goa' AND 
+status = pending
+                                    
+ Ask Gemini:             
+ User is booking Goa trip. 
+Are these events relevant now?
+ Return: Matching events
+2/4/26, 10:48 AM - +91 84465 42360: and the other problem i feel is that the whole storage is on server side we can do it hybrid right
+2/4/26, 10:49 AM - NSheth.in: well : the query : looks simple : but in db it is hell 😂 : but I got your point will keep in on ROADMAN
+2/4/26, 10:49 AM - NSheth.in: *ROADMAP
+2/4/26, 10:50 AM - NSheth.in: so : UPDATE : will add CHROME EXTENTION
+2/4/26, 10:50 AM - +91 84465 42360: SERVER SIDE (Keep current):
+SQLite (event storage)
+FAISS (vector search)
+Pattern learning
+USE: Event extraction & storage
+
+CLIENT SIDE (Add):
+ Chrome Extension
+Background script
+IndexedDB cache (This we can keep  optional) 
+USE: Context detection & notifications
+
+COMMUNICATION:
+Extension ←→ Backend via REST API
+2/4/26, 10:50 AM - NSheth.in: ✅
+2/4/26, 10:51 AM - +91 84465 42360: yea i get that db at time acts up
+2/4/26, 10:53 AM - +91 84465 42360: accha @⁨NSheth.in⁩NSheth.in what you using for classifier
+2/4/26, 10:54 AM - NSheth.in: I am chaging new stuff : and will update
+2/4/26, 10:54 AM - NSheth.in: we need simplify
+2/4/26, 11:18 AM - +91 84465 42360: Okay
+2/4/26, 11:51 AM - NSheth.in: https://github.com/nityam2007/whatsapp-chat-rmd/blob/main/docs/diagrams/architecture.mmd
+2/4/26, 11:51 AM - NSheth.in: @⁨~Yaana⁩  : LIke now I totally remaked the ARCH
+2/4/26, 11:51 AM - NSheth.in: code is pending : but what you think of this new one
+2/4/26, 11:51 AM - NSheth.in: simpleified one and just does the task we want
+2/4/26, 11:52 AM - NSheth.in: will wait for approval : and then will start updaing code : as I have to pay for credits and all on AI : copilot and all
+2/4/26, 11:53 AM - +91 84465 42360: Lemme see
+2/4/26, 4:03 PM - NSheth.in: anything?
+2/4/26, 4:03 PM - NSheth.in: on new one ?
+2/4/26, 4:16 PM - +91 84465 42360: FAISS thoda unclear nahi hai ?
+2/4/26, 4:17 PM - NSheth.in: yeah , like faiss is not helping only
+2/4/26, 4:17 PM - NSheth.in: it is making task more complex
+2/4/26, 4:17 PM - +91 84465 42360: yea
+2/4/26, 4:18 PM - NSheth.in: as Gemini have 1M context we can add anything with compression
+2/4/26, 4:18 PM - +91 84465 42360: i saw that
+2/4/26, 4:18 PM - +91 84465 42360: btw what you using gemini version you using
+2/4/26, 4:18 PM - +91 84465 42360: its gemini 3 na
+2/4/26, 4:18 PM - NSheth.in: 3 preview
+2/4/26, 4:19 PM - +91 84465 42360: cause last issme i saw gemini 2 as classifier
+2/4/26, 4:19 PM - NSheth.in: yeah , I changed it
+2/4/26, 4:19 PM - NSheth.in: I read the rules , given by Akshat for hackathon <This message was edited>
+2/4/26, 4:19 PM - NSheth.in: so updated it
+2/4/26, 4:19 PM - Akshat @client @nityam: in proactive engine?
+2/4/26, 4:20 PM - NSheth.in: everything,
+2/4/26, 4:20 PM - +91 84465 42360: like FAISS search speed toh bada rahi hai
+2/4/26, 4:21 PM - NSheth.in: nah , so faiss needs 
+
+LlM - gemini
+Text embedding 
+Vector store
+2/4/26, 4:21 PM - NSheth.in: faiss is good when you have DATA in Millions
+2/4/26, 4:22 PM - NSheth.in: on small scale it is just waste of resources
+2/4/26, 4:22 PM - +91 84465 42360: embedding is being stored in ram right
+2/4/26, 4:23 PM - NSheth.in: vector : filebase + ram(when running)
+2/4/26, 4:23 PM - +91 84465 42360: so the search speed toh increase hogi
+2/4/26, 4:23 PM - +91 84465 42360: oiyie data lost ho raha hai kya
+2/4/26, 4:23 PM - NSheth.in: acha is way me bhi slow hoga , how much ran you will give
+2/4/26, 4:24 PM - NSheth.in: *ram
+2/4/26, 4:24 PM - +91 84465 42360: FAISA ke vajese ?
+2/4/26, 4:24 PM - NSheth.in: like 1gb data takes 2gb im vector when Running task
+2/4/26, 4:24 PM - NSheth.in: need clarification what you asking , regarding data
+2/4/26, 4:25 PM - Akshat @client @nityam: since embeddings are being stored in ram, are we losing data?
+2/4/26, 4:25 PM - Akshat @client @nityam: like message data
+2/4/26, 4:26 PM - Akshat @client @nityam: since ram is volatile
+2/4/26, 4:26 PM - NSheth.in: oh , see embedding is loaded in ram and not stored ,
+
+it is stroed in file based database : i.e vector store
+2/4/26, 4:30 PM - +91 84465 42360: like after 90 days the data ihn ram is volatile
+2/4/26, 4:30 PM - +91 84465 42360: Vector me rahega
+2/4/26, 4:30 PM - +91 84465 42360: but faiss index
+2/4/26, 4:32 PM - NSheth.in: ah , see RAM : only content we want to load 
+
+and other is on secondary storage as , we cant load all 90days one it will take humongous ram i.e in gbs like 10gb 20gb , 
+
+so we only load context in chunks 
+
+you might know that @⁨~Yaana⁩
+2/4/26, 4:33 PM - +91 84465 42360: meko na ye nahi sajh aa raha hai ki how FAISS handles restart
+2/4/26, 4:33 PM - NSheth.in: acha , so data in ram goes to FILE on HDD and it gets saved
+2/4/26, 4:33 PM - NSheth.in: and when restart it loads it
+2/4/26, 4:35 PM - +91 84465 42360: Haan han
+2/4/26, 4:35 PM - +91 84465 42360: Now that is nice
+2/4/26, 4:35 PM - NSheth.in: let me confirm that
+2/4/26, 4:35 PM - +91 84465 42360: But this architecture is killer
+2/4/26, 4:35 PM - NSheth.in: as we have dile based vectors
+2/4/26, 4:35 PM - NSheth.in: *file
+2/4/26, 4:36 PM - +91 84465 42360: Yes
+2/4/26, 4:37 PM - NSheth.in: new one ?
+2/4/26, 4:37 PM - NSheth.in: as old one is ok , but it spawns a system for each goal ,
+2/4/26, 4:37 PM - NSheth.in: Input: Gets embeddings from OpenAI API
+Used by:
+Context Builder (for building message context)
+FAISS_Q (semantic similarity search in Proactive Engine)
+Storage pairing: Sits alongside SQLite
+
+
+@⁨~Yaana⁩ : seee this
+2/4/26, 4:42 PM - NSheth.in: giving you summery of new one : so you can understand it better and once I get approval I will refractor code for new one
+2/4/26, 4:45 PM - NSheth.in: also @⁨~Yaana⁩ : current one is simpe FAISS : we want FB one na ? facebook
+2/4/26, 4:55 PM - Akshat @client @nityam: Simple FAISS is for simple and local tasks right
+2/4/26, 4:55 PM - NSheth.in: like : I am simpleyifn it more
+2/4/26, 4:56 PM - NSheth.in: reduce all extra and USE VECTOR + Facebook FIASS
+2/4/26, 4:56 PM - Akshat @client @nityam: Well yea I mean we want to use Facebook FAISS only
+2/4/26, 4:57 PM - Akshat @client @nityam: But let ananya confirm too once
+2/4/26, 4:57 PM - NSheth.in: I am still doing ARCH thing
+2/4/26, 4:57 PM - Akshat @client @nityam: Ok
+2/4/26, 4:57 PM - NSheth.in: so not coing but thinking
+2/4/26, 4:58 PM - NSheth.in: as I made it too too complex by just coding coding : so now first I make plan
+2/4/26, 4:58 PM - Akshat @client @nityam: Ok
+2/4/26, 5:14 PM - +91 84465 42360: Yea
+2/4/26, 5:14 PM - +91 84465 42360: 
+2/4/26, 5:21 PM - NSheth.in: yeah yeah
+2/4/26, 5:21 PM - NSheth.in: I will share again a simple one
+2/4/26, 5:21 PM - NSheth.in: improveing it more
+2/4/26, 5:42 PM - NSheth.in: https://github.com/nityam2007/whatsapp-chat-rmd/blob/main/docs/diagrams/archv2.mmd
+
+
+ARCH v2 : now it looks good too me : it should be
+2/4/26, 8:36 PM - +91 84465 42360: do we need open api why cant we just do it with sql lite
+2/4/26, 8:36 PM - NSheth.in: Embedded model : vector: fassi
+2/4/26, 8:37 PM - +91 84465 42360: context building ke liye nikal de kya open ai
+2/4/26, 8:39 PM - +91 84465 42360: we can keep faiss but it would make things complex actually its good to have it but manage karna padega thoda sa
+2/4/26, 8:39 PM - +91 84465 42360: yea
+2/4/26, 8:40 PM - +91 84465 42360: Removed FAISS (like I suggested)
+ Removed OpenAI embeddings
+ Simplified to SQLite only
+Kept Chrome Extension
+ Kept Proactive Engine
+ Kept Gemini validation
+2/4/26, 8:43 PM - NSheth.in: how like sqlite : how will you find relation also , after 10k msg it wont work only 🫠
+2/4/26, 8:43 PM - NSheth.in: saw that
+2/4/26, 8:43 PM - NSheth.in: also faiss : facebook will save on larges data : 50k plus msg and I think that will be reach under 10days
+2/4/26, 8:43 PM - +91 84465 42360: yea thats the point
+2/4/26, 8:44 PM - NSheth.in: like JK : you telling it looks good now remove core from it
+2/4/26, 8:44 PM - NSheth.in: 😂🤭
+2/4/26, 8:44 PM - NSheth.in: faiss
+2/4/26, 8:44 PM - +91 84465 42360: lmao
+2/4/26, 8:45 PM - NSheth.in: I implemented this new one
+2/4/26, 8:45 PM - +91 84465 42360: i am just overwhelmed by the arhitcture
+2/4/26, 8:45 PM - +91 84465 42360: man
+2/4/26, 8:45 PM - NSheth.in: where all things are in : vectors
+2/4/26, 8:45 PM - NSheth.in: all chats and all
+2/4/26, 8:45 PM - +91 84465 42360: oh i havent chacked it ek min
+2/4/26, 8:45 PM - NSheth.in: why not take benefits of 1M tokens
+2/4/26, 8:45 PM - NSheth.in: *context
+2/4/26, 8:45 PM - +91 84465 42360: one thing i can suggest
+2/4/26, 8:45 PM - NSheth.in: yes ?
+2/4/26, 8:46 PM - +91 84465 42360: Multi-layered approach
+    1. Structured data extraction (Gemini)2. Indexed columns (SQLite)
+ 3. Smart filtering (SQL)
+├─ 4. Final validation (Gemini)
+└─ This DOES work at 10K+ message
+2/4/26, 8:46 PM - +91 84465 42360: this was what i had in my mind pehle
+2/4/26, 8:46 PM - +91 84465 42360: i checked this with chatgpt is does say that it can work with with 10k messages
+2/4/26, 8:47 PM - +91 84465 42360: but see chatgpt doesnt know the progress and all so it might be hallucinating
+2/4/26, 8:47 PM - +91 84465 42360: like context abhi bas aise hi i used so it doesnt have an context
+2/4/26, 8:49 PM - NSheth.in: yeah , I am on it
+2/4/26, 8:49 PM - NSheth.in: let me see
+2/4/26, 8:50 PM - NSheth.in: like , yeah step 1 fine 
+
+step2 fine 
+
+
+what have you thought on Step 3 : some joins and qurry ?
+
+4 is ok
+2/4/26, 8:50 PM - +91 84465 42360: in this new architecture we using vector first memory ?
+2/4/26, 8:51 PM - +91 84465 42360: quicksave as npm ?//
+2/4/26, 8:51 PM - +91 84465 42360: why
+2/4/26, 8:51 PM - NSheth.in: yeah , so that all msg can be ranked as well faiss so
+2/4/26, 8:51 PM - NSheth.in: 🤔
+2/4/26, 8:52 PM - +91 84465 42360: are we using FAISS really in this architecture
+2/4/26, 8:53 PM - NSheth.in: like I am working on V3 of our approch
+2/4/26, 8:53 PM - NSheth.in: if code is working well na
+2/4/26, 8:53 PM - NSheth.in: we can use it
+2/4/26, 8:53 PM - NSheth.in: else we move to V4
+2/4/26, 8:53 PM - NSheth.in: just making webui and triggeres
+2/4/26, 8:53 PM - +91 84465 42360: It's not a real npm package
+You can't just  npm install quicksave can we ?
+i think kuch confusion hai  concept me with implementation
+2/4/26, 8:54 PM - NSheth.in: quicksave : token compressor?
+2/4/26, 8:54 PM - +91 84465 42360: yea
+2/4/26, 8:55 PM - NSheth.in: so its funny thing , 
+
+like quicksave is just claude code SKILL where
+
+
+LLM uses kanji and it saves cost and that github have MD file for it as reference and AI use it 
+
+lmao
+2/4/26, 8:56 PM - NSheth.in: <Media omitted>
+2/4/26, 8:56 PM - +91 84465 42360: we using gemini 1 M token as 
+ top-100 enriched msgs Sending 100 messages to Gemini each search
+ This will be Slow and Expensive 
+  this will overkill
+2/4/26, 8:57 PM - NSheth.in: yes : Have that in mind , we can reduce it to 30 msg ? save side
+2/4/26, 8:57 PM - NSheth.in: *safe side
+2/4/26, 8:58 PM - NSheth.in: na na , not 1M : but it will have memory of it
+2/4/26, 8:58 PM - NSheth.in: yeah , :: v3 lets test it 
+
+also lets make plan for v4
+2/4/26, 8:59 PM - NSheth.in: v4 : SQL
+2/4/26, 9:00 PM - +91 84465 42360: EVERY CONTEXT CHECK:
+
+1. SQLite Query (top-10 candidates)
+2. Gemini Validation 10 candidates, not 100
+   Input: Query + 10 messages
+   Average: 5,000 tokens
+3. Total per context check:
+   Cost: $0.000375
+    Time: ~805ms
+    User sees: FAST
+2/4/26, 9:01 PM - NSheth.in: how will it be proactive? 
+
+a question,  also like how will SQL query will made as all msg are diff ?
+2/4/26, 9:01 PM - NSheth.in: we have 3-4 type of patterns na
+2/4/26, 9:01 PM - NSheth.in: 🤔
+2/4/26, 9:02 PM - NSheth.in: like we can find answers to it and implement that and make it as simple as possible
+2/4/26, 9:02 PM - NSheth.in: will appreciate it
+2/4/26, 9:10 PM - +91 84465 42360: okay
+2/4/26, 9:12 PM - NSheth.in: like : I we want : want do call/meet tomm : any time : 
+AND WILL COMPLET MOST STUFF DURING THAT MMET : til then : lets make : diagram or TEST for flow and library and all 
+except : (11 AM to 3 PM)
+2/4/26, 9:17 PM - NSheth.in: as we got less time : you know that better than me
+2/4/26, 9:21 PM - NSheth.in: @⁨Akshat @client @nityam⁩ and @⁨~Yaana⁩  : WIll wait for both
+2/4/26, 9:23 PM - Akshat @client @nityam: Nityam see I'll also check the v2 architect that you've sent
+2/4/26, 9:23 PM - Akshat @client @nityam: But just one thing brother
+2/4/26, 9:24 PM - Akshat @client @nityam: Dekh Jo 5 scenario bheje haina bas woh chalwa do kaise taise, jo architecture use karna jaise bhi whatever that you feel is right you're free to use, bas woh 4 scenario chal jaye
+2/4/26, 9:24 PM - NSheth.in: no use : I tried to implement it and dropeed it
+2/4/26, 9:24 PM - Akshat @client @nityam: You have full freedom to use whatever you want in architecture
+2/4/26, 9:24 PM - NSheth.in: also got more comlex and COSTY
+2/4/26, 9:25 PM - Akshat @client @nityam: Bas explainable ho
+2/4/26, 9:25 PM - Akshat @client @nityam: And it doesn't get too complex
+2/4/26, 9:25 PM - Akshat @client @nityam: Because simplify karne ke chakkar me v2 overcomplicated ho gaya <This message was edited>
+2/4/26, 9:25 PM - NSheth.in: yeah man
+2/4/26, 9:25 PM - Akshat @client @nityam: Feb 8 tak uske baad woh breakdown bhi ho jaye toh chalega
+2/4/26, 9:26 PM - Akshat @client @nityam: FAISS sql jo bhi use karna ho go for it
+2/4/26, 9:26 PM - Akshat @client @nityam: Bas ye 5 scenario chal jaye
+2/4/26, 9:26 PM - Akshat @client @nityam: Baaki toh you are working really hard on this and we appreciate it <This message was edited>
+2/4/26, 9:27 PM - NSheth.in: yeah man got that
+2/4/26, 9:27 PM - NSheth.in: also like bro : that 5 examples na
+2/4/26, 9:27 PM - Akshat @client @nityam: Ha kal meeting karlenge
+2/4/26, 9:27 PM - NSheth.in: there was email , and other stuff too : external links and all
+2/4/26, 9:28 PM - +91 84465 42360: Yea that's what
+2/4/26, 9:28 PM - NSheth.in: so : DOM ko read karna will make extention complex : So if user have chat like : netlfix last month : and when i opne netfliw it will add a trigger saing cnacle remider 
+
+works this ?
+2/4/26, 9:34 PM - Akshat @client @nityam: I think to solve that in my opinion for Netflix wala scenario what we can do is that note/email instead of note or email we can have the user do that in our app like we can have a notes section in our app where there user will just input something like " I need to cancel netflix after this show" and it will keep it in the memory like every other event but the trigger would be, when it detects netflix url? Because netflix screen can't be shared/seen by our system as they have blockers so...we can have a solution like that? Idk, suggest something else whatever you or ananya have in mind. <This message was edited>
+2/4/26, 9:36 PM - Akshat @client @nityam: And is Amazon example is also getting hard to solve? I might have a way to solve that
+2/4/26, 9:38 PM - NSheth.in: <Media omitted>
+2/4/26, 9:38 PM - NSheth.in: like for now keep it to whatsapp only ?

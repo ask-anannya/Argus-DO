@@ -1,0 +1,17 @@
+node_modules
+dist
+data
+logs
+*.db
+*.log
+.env
+.git
+.gitignore
+.eslintcache
+coverage
+tests
+extension
+*.md
+!README.md
+.vscode
+.cursor

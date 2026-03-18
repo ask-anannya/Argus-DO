@@ -1,0 +1,20 @@
+{
+  "name": "whatsapp-argus-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Argus WhatsApp Memory Assistant + Evolution API",
+  "scripts": {
+    "dev": "concurrently -n \"EVOL,ARGUS\" -c \"blue,green\" \"npm run dev:evolution\" \"npm run dev:argus\"",
+    "dev:argus": "cd argus && npm run dev",
+    "dev:evolution": "cd evolution-api && npm run start",
+    "start": "concurrently -n \"EVOL,ARGUS\" -c \"blue,green\" \"npm run start:evolution\" \"npm run start:argus\"",
+    "start:argus": "cd argus && npm start",
+    "start:evolution": "cd evolution-api && npm run start:prod",
+    "build": "cd argus && npm run build",
+    "kill": "pkill -f 'node.*tsx' 2>/dev/null; pkill -f 'node.*server' 2>/dev/null; pkill -f 'evolution' 2>/dev/null; echo '✅ Killed all services'",
+    "restart": "npm run kill && sleep 2 && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

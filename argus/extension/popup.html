@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Argus</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      width: 360px;
+      min-height: 400px;
+      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      color: #e4e4e7;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      color: white;
+    }
+    .logo { font-weight: 700; font-size: 16px; letter-spacing: 0.3px; }
+    .status { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #fbbf24; }
+    .status-dot.connected { background: #34d399; }
+    .status-dot.error { background: #f87171; }
+
+    .tabs {
+      display: flex;
+      background: rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      font-size: 12px;
+      cursor: pointer;
+      color: #a1a1aa;
+      border-bottom: 2px solid transparent;
+      letter-spacing: 0.3px;
+      transition: color 0.15s;
+    }
+    .tab:hover { color: #fff; }
+    .tab.active { color: #818cf8; border-bottom-color: #818cf8; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      padding: 12px;
+      gap: 8px;
+      background: transparent;
+    }
+    .stat {
+      text-align: center;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+    .stat-value { display: block; font-size: 20px; font-weight: 700; color: #a78bfa; }
+    .stat-label { font-size: 10px; color: #71717a; }
+
+    .events { padding: 12px; max-height: 300px; overflow-y: auto; }
+    .events h3 { font-size: 11px; color: #71717a; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.8px; }
+
+    .event-item {
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 8px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      transition: background 0.15s, box-shadow 0.15s;
+    }
+    .event-item:hover {
+      background: rgba(255, 255, 255, 0.10);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+    .event-header { display: flex; justify-content: space-between; align-items: flex-start; }
+    .event-title { font-weight: 600; font-size: 13px; flex: 1; }
+    .event-badge {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+    .badge-discovered { background: #fbbf24; color: #000; }
+    .badge-snoozed { background: #a78bfa; color: #fff; }
+    .badge-scheduled { background: #818cf8; color: #fff; }
+    .badge-ignored { background: #6b7280; color: #fff; }
+    .badge-completed { background: #34d399; color: #000; }
+
+    .event-meta {
+      display: flex;
+      gap: 8px;
+      font-size: 11px;
+      color: #71717a;
+      margin-top: 6px;
+    }
+    .event-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .btn {
+      flex: 1;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: opacity 0.15s, box-shadow 0.15s;
+    }
+    .btn-schedule { background: #34d399; color: #000; box-shadow: 0 2px 8px rgba(52, 211, 153, 0.3); }
+    .btn-later { background: #fbbf24; color: #000; box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3); }
+    .btn-done { background: #818cf8; color: #fff; box-shadow: 0 2px 8px rgba(129, 140, 248, 0.3); }
+    .btn-delete { background: #f87171; color: #fff; box-shadow: 0 2px 8px rgba(248, 113, 113, 0.3); }
+    .btn:hover { opacity: 0.85; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+
+    .empty {
+      text-align: center;
+      color: #71717a;
+      padding: 30px;
+      font-size: 13px;
+    }
+
+    .footer {
+      padding: 12px;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .footer a {
+      color: #818cf8;
+      text-decoration: none;
+      font-size: 12px;
+    }
+    .footer a:hover { text-decoration: underline; }
+
+    .btn-export {
+      background: rgba(129, 140, 248, 0.15);
+      border: 1px solid rgba(129, 140, 248, 0.3);
+      color: #818cf8;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      margin-bottom: 8px;
+      width: 100%;
+      transition: background 0.15s;
+    }
+    .btn-export:hover { background: rgba(129, 140, 248, 0.25); }
+    .btn-export:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .events::-webkit-scrollbar { width: 4px; }
+    .events::-webkit-scrollbar-track { background: transparent; }
+    .events::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 2px; }
+
+    .error-banner {
+      padding: 6px 16px;
+      background: rgba(248, 113, 113, 0.15);
+      color: #f87171;
+      font-size: 11px;
+      text-align: center;
+      border-bottom: 1px solid rgba(248, 113, 113, 0.2);
+    }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">Argus</div>
+    <div class="status">
+      <span class="status-dot" id="status-dot"></span>
+      <span class="status-text" id="status-text">Connecting...</span>
+    </div>
+  </div>
+
+  <div class="error-banner hidden" id="error-banner">
+    ⚠️ Cannot reach Argus server
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="new">New</div>
+    <div class="tab" data-tab="scheduled">Active</div>
+    <div class="tab" data-tab="done">Done</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <span class="stat-value" id="stat-new">-</span>
+      <span class="stat-label">New</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value" id="stat-scheduled">-</span>
+      <span class="stat-label">Active</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value" id="stat-completed">-</span>
+      <span class="stat-label">Done</span>
+    </div>
+  </div>
+
+  <div class="events" id="tab-new">
+    <h3>New Events (Approve or Dismiss)</h3>
+    <div id="new-events-list"><p class="empty">Loading...</p></div>
+  </div>
+
+  <div class="events hidden" id="tab-scheduled">
+    <h3>Scheduled Events (Will Show Context Reminders)</h3>
+    <div id="scheduled-events-list"><p class="empty">Loading...</p></div>
+  </div>
+
+  <div class="events hidden" id="tab-done">
+    <h3>Completed Events</h3>
+    <div id="done-events-list"><p class="empty">Loading...</p></div>
+  </div>
+
+  <div class="footer">
+    <button class="btn-export" id="export-backup">Export Backup</button>
+    <a href="http://localhost:3000" target="_blank">Open Dashboard ↗</a>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
